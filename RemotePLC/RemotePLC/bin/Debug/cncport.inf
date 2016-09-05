@@ -1,0 +1,110 @@
+;******************************************************************************
+;
+; cncport.inf
+;
+; Installation file for the Null-modem emulator driver.
+;
+; Copyright (c) 2010-2012 Vyacheslav Frolov
+;
+;******************************************************************************
+
+[Version]
+Signature = "$Windows NT$"
+Provider = %TCBSW%
+Class = CNCPorts
+ClassGUID = {df799e12-3c56-421b-b298-b6d3642bc878}
+CatalogFile = TCB_VCom.cat
+;           MM/DD/YYYY
+DriverVer=06/07/2016,9.41.47.47
+UninstallInfTag = {df799e12-3c56-421b-b298-b6d3642bc878}
+
+;******************************************************************************
+;
+; Driver information
+;
+;******************************************************************************
+
+[Manufacturer]
+%TCBSW% = TCB_VCom, NTx86, NTia64, NTamd64
+
+[ControlFlags]
+ExcludeFromSelect = TCB_VCom\cncport
+
+[TCB_VCom]
+%TCB_VCom.PortDesc% = TCB_VCom_inst_port, TCB_VCom\cncport
+
+[TCB_VCom.NTx86]
+%TCB_VCom.PortDesc% = TCB_VCom_inst_port, TCB_VCom\cncport
+
+[TCB_VCom.NTia64]
+%TCB_VCom.PortDesc% = TCB_VCom_inst_port, TCB_VCom\cncport
+
+[TCB_VCom.NTamd64]
+%TCB_VCom.PortDesc% = TCB_VCom_inst_port, TCB_VCom\cncport
+
+;******************************************************************************
+;
+; Port install section
+;
+;******************************************************************************
+
+[TCB_VCom_inst_port]
+AddReg = TCB_VCom_AddReg
+;Include = msports.inf
+;Needs = SerialEnumerator.NT
+
+[TCB_VCom_inst_port.Services]
+AddService = TCB_VCom, %SPSVCINST_ASSOCSERVICE%, TCB_VCom_Service_Inst, TCB_VCom_EventLog_Inst
+;Include = msports.inf
+;Needs = SerialEnumerator.NT.Services
+
+[TCB_VCom_inst_port.HW]
+AddReg = TCB_VCom_HW_AddReg
+
+[TCB_VCom_AddReg]
+
+[TCB_VCom_HW_AddReg]
+;HKR,,"UpperFilters",0x00010000,"serenum"
+
+;******************************************************************************
+;
+; Common section
+;
+;******************************************************************************
+
+[TCB_VCom_Service_Inst]
+DisplayName    = %TCB_VCom.SrvDesc%
+ServiceType    = %SERVICE_KERNEL_DRIVER%
+StartType      = %SERVICE_DEMAND_START%
+ErrorControl   = %SERVICE_ERROR_NORMAL%
+ServiceBinary  = %12%\TCB_VCom.sys
+
+[TCB_VCom_EventLog_Inst]
+AddReg = TCB_VCom_EventLog_AddReg
+
+[TCB_VCom_EventLog_AddReg]
+HKR,,EventMessageFile,%REG_EXPAND_SZ%,"%%SystemRoot%%\System32\IoLogMsg.dll;%%SystemRoot%%\System32\drivers\TCB_VCom.sys"
+HKR,,TypesSupported,%REG_DWORD%,7
+
+;******************************************************************************
+;
+; Strings
+;
+;******************************************************************************
+
+[Strings]
+
+SPSVCINST_ASSOCSERVICE = 0x00000002
+
+REG_EXPAND_SZ          = 0x00020000
+REG_DWORD              = 0x00010001
+
+SERVICE_KERNEL_DRIVER  = 1
+SERVICE_DEMAND_START   = 3
+SERVICE_ERROR_NORMAL   = 1
+
+TCBSW = "TCB SW"
+TCB_VCom.PortDesc = "TCB_VCom - cnc"
+TCB_VCom.SrvDesc = "TCB_VCom - emulates the serial ports interconnected via a null-modem cable"
+
+;******************************************************************************

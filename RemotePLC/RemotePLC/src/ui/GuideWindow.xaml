@@ -1,0 +1,301 @@
+﻿<Window
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:RemotePLC.src.ui"
+        xmlns:res="clr-namespace:RemotePLC.Properties"
+        xmlns:Themes="clr-namespace:Microsoft.Windows.Themes;assembly=PresentationFramework.Aero" x:Class="RemotePLC.src.ui.GuideWindow"
+        mc:Ignorable="d"
+        Title="{x:Static res:Resources.IDS_APPNAME}"
+        Height="520" Width="760" ResizeMode="CanMinimize" WindowStartupLocation="CenterScreen" KeyDown="Window_KeyDown" Closing="Window_Closing">
+    <Window.Resources>
+        <local:ColorConverter x:Key="colorCvt" />
+        <Style  x:Key="tips" TargetType="{x:Type TextBlock}">
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="FontSize" Value="32"/>
+            <Setter Property="Margin" Value="50, 0"/>
+        </Style>
+        <Style x:Key="banner" TargetType="{x:Type Grid}">
+            <!--<Setter Property="Background" Value="DarkTurquoise"/>-->
+            <Setter Property="Background">
+                <Setter.Value>
+                    <ImageBrush ImageSource="/RemotePLC;component/res/banner.png" Stretch="UniformToFill"/>
+                </Setter.Value>
+            </Setter>
+        </Style>
+        <Style  x:Key="info" TargetType="{x:Type TextBlock}">
+            <Setter Property="Margin" Value="10 5"/>
+            <Setter Property="FontSize" Value="16"/>
+        </Style>
+        <Style TargetType="{x:Type Button}">
+            <Setter Property="Margin" Value="20 10"/>
+            <Setter Property="Width" Value="120"/>
+            <Setter Property="Height" Value="32"/>
+        </Style>
+        <Style x:Key="flip" TargetType="{x:Type Button}" >
+            <Setter Property="FontSize" Value="48"/>
+            <Setter Property="FontWeight" Value="Black"/>
+            <Setter Property="Foreground" Value="DarkTurquoise"/>
+            <Setter Property="BorderBrush" Value="Transparent"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type Button}">
+                        <Border  x:Name="_border" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" Background="{TemplateBinding Background}"   SnapsToDevicePixels="true">
+                            <ContentPresenter x:Name="_contentPanel" HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" Margin="{TemplateBinding Padding}" RecognizesAccessKey="True" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" VerticalAlignment="{TemplateBinding VerticalContentAlignment}"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsEnabled" Value="false">
+                                <Setter Property="Foreground" Value="#ADADAD"/>
+                            </Trigger>
+                            <Trigger Property="IsEnabled" Value="true">
+                                <Setter Property="Background" Value="#33FFFFFF" TargetName="_border"/>
+                            </Trigger>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter Property="Background" Value="#88eeeeee" TargetName="_border"/>
+                            </Trigger>
+                            <Trigger Property="IsPressed" Value="True">
+                                <Setter Property="Margin" TargetName="_contentPanel" Value="2,2,0,0"/>
+                                <Setter Property="Background" Value="#ffeeeeee" TargetName="_border"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+    </Window.Resources>
+    <DockPanel>
+        <Menu DockPanel.Dock="Top">
+            <MenuItem Header="{x:Static res:Resources.IDS_SETUP}" Click="MenuItem_Click"/>
+            <MenuItem Header="{x:Static res:Resources.IDS_USERMANUAL}" Click="MenuItem_Click"/>
+            <MenuItem Header="{x:Static res:Resources.IDS_ABOUT}" Click="MenuItem_Click"/>
+        </Menu>
+        <!--<StatusBar DockPanel.Dock="Bottom">
+            <StatusBarItem>
+                <TextBlock Text="http://www.tcb.com.cn"/>
+            </StatusBarItem>
+        </StatusBar>-->
+        <TabControl x:Name="tabControl" SelectionChanged="TabControl_SelectionChanged" Background="White" Padding="0">
+            <TabControl.ItemContainerStyle>
+                <Style TargetType="{x:Type TabItem}">
+                    <Setter Property="Visibility" Value="Collapsed" />
+                </Style>
+            </TabControl.ItemContainerStyle>
+            <TabItem x:Name="deviceTab">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="30*"/>
+                        <RowDefinition Height="70*"/>
+                    </Grid.RowDefinitions>
+                    <Grid Grid.Row="0" Style="{StaticResource banner}">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="3*"/>
+                            <ColumnDefinition Width="91*"/>
+                        </Grid.ColumnDefinitions>
+                        <TextBlock Text="{x:Static res:Resources.IDS_PROMPT01}" Style="{StaticResource tips}" VerticalAlignment="Center" Grid.Column="1" Margin="26,48,50,48"/>
+                    </Grid>
+                    <Grid Grid.Row="1">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="100*"/>
+                            <ColumnDefinition Width="auto"/>
+                        </Grid.ColumnDefinitions>
+                        <Grid Grid.Column="1">
+                            <Button x:Name="btnDeviceNextStep" Content="&gt;" HorizontalAlignment="Right" Click="Button_Click" Style="{StaticResource flip}"/>
+                        </Grid>
+                        <Grid Grid.Column="0" Margin="20">
+                            <Grid.RowDefinitions>
+                                <RowDefinition/>
+                                <RowDefinition Height="auto"/>
+                            </Grid.RowDefinitions>
+                            <ListView x:Name="deviceList" Foreground="Black" Grid.Row="0" >
+                                <ListView.Resources>
+                                    <Style TargetType="{x:Type ListViewItem}" >
+                                        <Setter Property="Margin" Value="4" />
+                                        <Setter Property="Foreground" Value="{Binding color, Converter={StaticResource colorCvt}}"/>
+                                    </Style>
+                                </ListView.Resources>
+                                <ListView.View>
+                                    <GridView>
+                                        <GridViewColumn Header="{x:Static res:Resources.IDS_HEADER_DESC}" DisplayMemberBinding="{Binding desc}" />
+                                        <GridViewColumn Header="{x:Static res:Resources.IDS_HEADER_DTUSN}" DisplayMemberBinding="{Binding sn}" />
+                                        <!--<GridViewColumn Header="{x:Static res:Resources.IDS_HEADER_DTUIP}" DisplayMemberBinding="{Binding Path=ip}"  />
+                                        <GridViewColumn Header="{x:Static res:Resources.IDS_HEADER_DTUPORT}" DisplayMemberBinding="{Binding Path=port}" />-->
+                                        <GridViewColumn Header="{x:Static res:Resources.IDS_HEADER_ONLINESTATE}" DisplayMemberBinding="{Binding linkStatus}" />
+                                        <GridViewColumn Header="{x:Static res:Resources.IDS_HEADER_RUNNINGSTATE}" DisplayMemberBinding="{Binding runningMode}" />
+                                        <GridViewColumn Header="{x:Static res:Resources.IDS_HEADER_PLCBRAND}" DisplayMemberBinding="{Binding manufacturer}" />
+                                        <GridViewColumn Header="{x:Static res:Resources.IDS_HEADER_PLCMODEL}" DisplayMemberBinding="{Binding plc}" />
+                                    </GridView>
+                                </ListView.View>
+                            </ListView>
+                            <Grid Grid.Row="1">
+                                <Button x:Name="btnDeviceRefresh" Content="{x:Static res:Resources.IDS_REFRESH}" Click="Button_Click" Margin="0 20 0 0"/>
+                            </Grid>
+                        </Grid>
+                    </Grid>
+                </Grid>
+            </TabItem>
+            <TabItem x:Name="comTab">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="30*"/>
+                        <RowDefinition Height="70*"/>
+                    </Grid.RowDefinitions>
+                    <Grid Grid.Row="0" Style="{StaticResource banner}">
+                        <TextBlock Text="{x:Static res:Resources.IDS_PROMPT02}" Style="{StaticResource tips}" VerticalAlignment="Center"/>
+                    </Grid>
+                    <Grid Grid.Row="1">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="auto"/>
+                            <ColumnDefinition Width="100*"/>
+                            <ColumnDefinition Width="auto"/>
+                        </Grid.ColumnDefinitions>
+                        <Grid Grid.Column="0">
+                            <Button x:Name="btnVComLastStep" Content="&lt;" HorizontalAlignment="Left" Click="Button_Click" Style="{StaticResource flip}"/>
+                        </Grid>
+                        <Grid Grid.Column="1">
+                            <TabControl Margin="10, 20" x:Name="connectionTab">
+                                <TabItem Header="{x:Static res:Resources.IDS_TABHEADER_NETPORT}" Width="100">
+                                    <Grid Margin="20" HorizontalAlignment="Left" VerticalAlignment="Top">
+                                        <Grid.RowDefinitions>
+                                            <RowDefinition Height="auto"/>
+                                            <RowDefinition Height="auto"/>
+                                            <RowDefinition Height="auto"/>
+                                        </Grid.RowDefinitions>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="auto"/>
+                                            <ColumnDefinition Width="auto"/>
+                                        </Grid.ColumnDefinitions>
+                                        <TextBlock Text="{x:Static res:Resources.IDS_DTUIP}" Grid.Column="0" Grid.Row="0" Margin="10"/>
+                                        <TextBlock Text="{x:Static res:Resources.IDS_PLCIP}" Grid.Column="0" Grid.Row="1" Margin="10"/>
+                                        <TextBlock Text="{x:Static res:Resources.IDS_PLCPORT}" Grid.Column="0" Grid.Row="2" Margin="10"/>
+                                        <TextBlock x:Name="dtuiptext" Grid.Column="1" Grid.Row="0" Width="120" Margin="10"/>
+                                        <TextBox x:Name="plciptext" Grid.Column="1" Grid.Row="1" Width="120" Margin="10"/>
+                                        <TextBox x:Name="plcporttext" Grid.Column="1" Grid.Row="2" Width="80" Margin="10" HorizontalAlignment="Left"/>
+                                    </Grid>
+                                </TabItem>
+                                <TabItem Header="{x:Static res:Resources.IDS_TABHEADER_SERIALPORT}" Width="100">
+                                    <Grid>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="50*"/>
+                                            <ColumnDefinition Width="50*"/>
+                                        </Grid.ColumnDefinitions>
+                                        <ListView x:Name="vcomlist" Foreground="Black" SelectionMode="Single" Margin="30" Grid.Column="0">
+                                            <ListView.Resources>
+                                                <Style TargetType="{x:Type GridViewColumnHeader}">
+                                                    <Setter Property="Visibility" Value="Collapsed" />
+                                                </Style>
+                                            </ListView.Resources>
+                                            <ListView.View>
+                                                <GridView>
+                                                    <GridViewColumn Header="{x:Static res:Resources.IDS_SERIALPORT}" DisplayMemberBinding="{Binding VComName}" Width="200"/>
+                                                </GridView>
+                                            </ListView.View>
+                                        </ListView>
+                                        <StackPanel Grid.Column="1" HorizontalAlignment="Left" VerticalAlignment="Center">
+                                            <Button x:Name="btnVComAdd" Content="{x:Static res:Resources.IDS_ADD}" Click="Button_Click"/>
+                                            <Button x:Name="btnVComDel" Content="{x:Static res:Resources.IDS_DELETE}" Click="Button_Click"/>
+                                            <Button x:Name="btnVComDelAll" Content="{x:Static res:Resources.IDS_DELETEALL}" Click="Button_Click"/>
+                                        </StackPanel>
+                                    </Grid>
+                                </TabItem>
+                            </TabControl>
+                        </Grid>
+                        <Grid Grid.Column="2">
+                            <Button x:Name="btnVComNextStep" Content="&gt;" Click="Button_Click" Style="{StaticResource flip}" HorizontalAlignment="Right"/>
+                        </Grid>
+                    </Grid>
+                </Grid>
+            </TabItem>
+            <TabItem x:Name="runTab">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="30*"/>
+                        <RowDefinition Height="70*"/>
+                    </Grid.RowDefinitions>
+                    <Grid Grid.Row="0" Style="{StaticResource banner}">
+                        <TextBlock Text="{x:Static res:Resources.IDS_PROMPT03}" Grid.Row="1" Style="{StaticResource tips}" VerticalAlignment="Center"/>
+                    </Grid>
+                    <Grid Grid.Row="1">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="auto"/>
+                            <ColumnDefinition Width="100*"/>
+                        </Grid.ColumnDefinitions>
+                        <Grid Grid.Column="0">
+                            <Button x:Name="btnConnectionLastStep" Content="&lt;" HorizontalAlignment="Left" Click="Button_Click" Style="{StaticResource flip}"/>
+                        </Grid>
+                        <Grid Grid.Column="1">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="40*"/>
+                                <ColumnDefinition Width="50*"/>
+                            </Grid.ColumnDefinitions>
+                            <Grid Grid.Column="0">
+                                <StackPanel Margin="20, 50">
+                                    <Grid>
+                                        <Grid.RowDefinitions>
+                                            <RowDefinition Height="auto"/>
+                                            <RowDefinition Height="auto"/>
+                                        </Grid.RowDefinitions>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="auto" MinWidth="70"/>
+                                            <ColumnDefinition Width="auto" MinWidth="100"/>
+                                        </Grid.ColumnDefinitions>
+                                        <TextBlock Text="{x:Static res:Resources.IDS_LABEL_DTU}" Grid.Column="0" Grid.Row="0" Style="{StaticResource info}"/>
+                                        <TextBlock Text="{x:Static res:Resources.IDS_LABEL_STATUS}" Grid.Column="0" Grid.Row="1" Style="{StaticResource info}"/>
+                                        <TextBlock x:Name="textDtuSn" Grid.Column="1" Grid.Row="0" Style="{StaticResource info}" />
+                                        <TextBlock x:Name="textConnectionStatus" Grid.Column="1" Grid.Row="1" Style="{StaticResource info}"/>
+                                    </Grid>
+                                    <Grid Margin="20">
+                                        <Button x:Name="btnConnectionTest" Content="{x:Static res:Resources.IDS_CONNECTION_TEST}" Click="Button_Click" HorizontalAlignment="Left"/>
+                                    </Grid>
+                                </StackPanel>
+                            </Grid>
+                            <Grid Grid.Column="1">
+                                <StackPanel Margin="20, 50">
+                                    <Grid x:Name="netInfoGrid">
+                                        <Grid.RowDefinitions>
+                                            <RowDefinition Height="auto"/>
+                                            <RowDefinition Height="auto"/>
+                                        </Grid.RowDefinitions>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="auto"/>
+                                            <ColumnDefinition Width="auto"/>
+                                        </Grid.ColumnDefinitions>
+                                        <TextBlock Grid.Row="0" Grid.Column="0" Text="{x:Static res:Resources.IDS_LABEL_LOCALIP}" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="10"/>
+                                        <TextBlock Grid.Row="0" Grid.Column="1" x:Name="textLocalIp" HorizontalAlignment="Left" VerticalAlignment="Center"/>
+                                        <TextBlock Grid.Row="1" Grid.Column="0" Text="{x:Static res:Resources.IDS_LABEL_SERVICEPORT}" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="10"/>
+                                        <TextBox Grid.Row="1" Grid.Column="1" x:Name="textServicePort" Width="80" HorizontalAlignment="Left" VerticalAlignment="Center"/>
+                                    </Grid>
+                                    <Grid x:Name="vcomInfoGrid" >
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="auto"/>
+                                            <ColumnDefinition Width="auto"/>
+                                        </Grid.ColumnDefinitions>
+                                        <TextBlock Grid.Column="0" Text="{x:Static res:Resources.IDS_LABEL_SERIALPORT}" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="10"/>
+                                        <TextBlock Grid.Column="1" x:Name="textVComName" HorizontalAlignment="Left" VerticalAlignment="Center"/>
+                                    </Grid>
+                                    <Grid Margin="20">
+                                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                                            <Button x:Name="btnStartService"  Click="Button_Click">
+                                                <StackPanel Orientation="Horizontal" >
+                                                    <Image Stretch="Uniform" Source="/RemotePLC;component/res/icon_start.png" VerticalAlignment="Center" Width="12" Height="12" Margin="3"/>
+                                                    <TextBlock Text="{x:Static res:Resources.IDS_CONNECT}" VerticalAlignment="Center" />
+                                                </StackPanel>
+                                            </Button>
+                                            <Button x:Name="btnStopService" Click="Button_Click" IsEnabled="False">
+                                                <StackPanel Orientation="Horizontal">
+                                                    <Image Stretch="Uniform" Source="/RemotePLC;component/res/icon_stop.png" VerticalAlignment="Center" Width="12" Height="12" Margin="3"/>
+                                                    <TextBlock Text="{x:Static res:Resources.IDS_DISCONNECT}" VerticalAlignment="Center" />
+                                                </StackPanel>
+                                            </Button>
+                                        </StackPanel>
+                                    </Grid>
+                                </StackPanel>
+                            </Grid>
+                        </Grid>
+                    </Grid>
+                </Grid>
+            </TabItem>
+        </TabControl>
+    </DockPanel>
+</Window>

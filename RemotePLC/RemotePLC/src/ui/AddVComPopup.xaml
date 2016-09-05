@@ -1,0 +1,36 @@
+﻿<Window x:Class="RemotePLC.src.ui.AddVComPopup"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:RemotePLC.src.ui"
+        mc:Ignorable="d"
+        Title="添加虚拟串口" Height="180" Width="240" ResizeMode="CanMinimize" WindowStartupLocation="CenterOwner">
+
+    <Window.Resources>
+        <Style TargetType="Button">
+            <Setter Property="Width"  Value="80"/>
+            <Setter Property="Height"  Value="26"/>
+            <Setter Property="Margin"  Value="10"/>
+        </Style>
+    </Window.Resources>
+    <DockPanel>
+        <Grid DockPanel.Dock="Bottom">
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="10">
+                <Button Content="确定" Click="Button_Click"/>
+                <Button Content="取消" Click="Button_Click"/>
+            </StackPanel>
+        </Grid>
+        <Grid>
+            <Grid Height="auto" VerticalAlignment="Center" HorizontalAlignment="Center" Margin="10">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="auto"/>
+                    <ColumnDefinition Width="auto"/>
+                </Grid.ColumnDefinitions>
+                <TextBlock Grid.Column="0" Text="虚拟串口：" Margin="10"/>
+                <ComboBox x:Name="comboBox" Grid.Column="1" Width="100" Margin="10" DisplayMemberPath="Name" SelectedValuePath="Id"/>
+            </Grid>
+        </Grid>
+
+    </DockPanel>
+</Window>

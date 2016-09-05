@@ -1,0 +1,171 @@
+﻿<Window x:Class="RemotePLC.src.ui.ConnectionTestDialog"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:RemotePLC.src.ui"
+        mc:Ignorable="d"
+        Title="连接测试" Height="520" Width="760" ResizeMode="CanMinimize" Loaded="Window_Loaded" Closed="Window_Closed" WindowStartupLocation="CenterOwner">
+    <Window.Resources>
+        <Style x:Key="tag" TargetType="{x:Type TextBlock}">
+            <Setter Property="Padding" Value="10"/>
+            <Setter Property="Background" Value="DarkTurquoise"/>
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="FontSize" Value="32"/>
+        </Style>
+        <Style TargetType="{x:Type ProgressBar}">
+            <Setter Property="Height" Value="20"/>
+            <Setter Property="Width" Value="80"/>
+            <Setter Property="BorderBrush" Value="Transparent"/>
+            <Setter Property="Foreground" Value="LawnGreen"/>
+        </Style>
+        <Style x:Key="checkpoint" TargetType="{x:Type TextBlock}">
+            <Setter Property="Padding" Value="10"/>
+            <Setter Property="Foreground" Value="DimGray"/>
+            <Setter Property="FontSize" Value="32"/>
+        </Style>
+        <Style x:Key="reason" TargetType="{x:Type TextBlock}">
+            <Setter Property="Margin" Value="20"/>
+            <Setter Property="Padding" Value="10"/>
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="Background" Value="Orange"/>
+            <Setter Property="FontSize" Value="16"/>
+            <Setter Property="Width" Value="320"/>
+            <Setter Property="Height" Value="auto"/>
+            <Setter Property="TextWrapping" Value="Wrap"/>
+            <Setter Property="Visibility" Value="Hidden"/>
+        </Style>
+        <Style x:Key="icon" TargetType="{x:Type Image}">
+            <Setter Property="Width" Value="32"/>
+            <Setter Property="Height" Value="32"/>
+            <Setter Property="HorizontalAlignment" Value="Center"/>
+            <Setter Property="VerticalAlignment" Value="Center"/>
+            <Setter Property="Stretch" Value="Uniform"/>
+            <Setter Property="Visibility" Value="Hidden"/>
+        </Style>
+        <ControlTemplate x:Key="ProgressBarControlTemplate" TargetType="{x:Type ProgressBar}">
+            <Grid x:Name="TemplateRoot" SnapsToDevicePixels="True">
+                <Rectangle Fill="{TemplateBinding Background}"/>
+                <Rectangle x:Name="PART_Track" />
+                <Decorator x:Name="PART_Indicator" HorizontalAlignment="Left">
+                    <Grid x:Name="Foreground">
+                        <Rectangle x:Name="Indicator" Fill="{TemplateBinding Foreground}"/>
+                        <Grid x:Name="Animation" ClipToBounds="True">
+                            <Rectangle x:Name="PART_GlowRect" HorizontalAlignment="Left" Margin="-100,0,0,0" Width="100"/>
+                        </Grid>
+                        <Grid x:Name="Overlay">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition MaxWidth="15"/>
+                                <ColumnDefinition Width="0.1*"/>
+                                <ColumnDefinition MaxWidth="15"/>
+                            </Grid.ColumnDefinitions>
+                            <Grid.RowDefinitions>
+                                <RowDefinition/>
+                                <RowDefinition/>
+                            </Grid.RowDefinitions>
+                            <Rectangle x:Name="LeftDark" Margin="1,1,0,1" RadiusY="1" RadiusX="1" Grid.RowSpan="2" />
+                            <Rectangle x:Name="RightDark" Grid.Column="2" Margin="0,1,1,1" RadiusY="1" RadiusX="1" Grid.RowSpan="2"/>
+                            <Rectangle x:Name="LeftLight" Grid.Column="0" Grid.Row="2"/>
+                            <Rectangle x:Name="CenterLight" Grid.Column="1" Grid.Row="2"/>
+                            <Rectangle x:Name="RightLight" Grid.Column="2" Grid.Row="2" />
+                            <Border x:Name="Highlight1" Grid.ColumnSpan="3" Grid.RowSpan="2" />
+                            <Border x:Name="Highlight2" Grid.ColumnSpan="3" Grid.RowSpan="2"/>
+                        </Grid>
+                    </Grid>
+                </Decorator>
+                <Border BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" />
+            </Grid>
+            <ControlTemplate.Triggers>
+                <Trigger Property="Orientation" Value="Vertical">
+                    <Setter Property="LayoutTransform" TargetName="TemplateRoot">
+                        <Setter.Value>
+                            <RotateTransform Angle="-90"/>
+                        </Setter.Value>
+                    </Setter>
+                </Trigger>
+                <Trigger Property="IsIndeterminate" Value="True">
+                    <Setter Property="Visibility" TargetName="LeftDark" Value="Collapsed"/>
+                    <Setter Property="Visibility" TargetName="RightDark" Value="Collapsed"/>
+                    <Setter Property="Visibility" TargetName="LeftLight" Value="Collapsed"/>
+                    <Setter Property="Visibility" TargetName="CenterLight" Value="Collapsed"/>
+                    <Setter Property="Visibility" TargetName="RightLight" Value="Collapsed"/>
+                    <Setter Property="Visibility" TargetName="Indicator" Value="Collapsed"/>
+                </Trigger>
+                <Trigger Property="IsIndeterminate" Value="False">
+                    <Setter Property="Background" TargetName="Animation" Value="#80B5FFA9"/>
+                </Trigger>
+            </ControlTemplate.Triggers>
+        </ControlTemplate>
+    </Window.Resources>
+    <Grid>
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="40*"/>
+                <RowDefinition Height="60*"/>
+            </Grid.RowDefinitions>
+            <Grid Grid.Row="0" Background="WhiteSmoke">
+                <Grid Height="auto" VerticalAlignment="Center" HorizontalAlignment="Center">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="auto"/>
+                        <ColumnDefinition Width="auto"/>
+                        <ColumnDefinition Width="auto"/>
+                        <ColumnDefinition Width="auto"/>
+                        <ColumnDefinition Width="auto"/>
+                        <ColumnDefinition Width="auto"/>
+                        <ColumnDefinition Width="auto"/>
+                    </Grid.ColumnDefinitions>
+                    <StackPanel Grid.Column="0">
+                        <TextBlock Text="PC" Style="{StaticResource tag}"/>
+                    </StackPanel>
+                    <StackPanel Grid.Column="1" VerticalAlignment="Center" >
+                        <ProgressBar x:Name="pointbar1" Template="{DynamicResource ProgressBarControlTemplate}" />
+                    </StackPanel>
+                    <StackPanel Grid.Column="2">
+                        <TextBlock Text="SERVER" Style="{StaticResource tag}"/>
+                    </StackPanel>
+                    <StackPanel Grid.Column="3" VerticalAlignment="Center">
+                        <ProgressBar x:Name="pointbar2" Template="{DynamicResource ProgressBarControlTemplate}" />
+                    </StackPanel>
+                    <StackPanel Grid.Column="4">
+                        <TextBlock Text="DTU" Style="{StaticResource tag}"/>
+                    </StackPanel>
+                    <StackPanel Grid.Column="5" VerticalAlignment="Center">
+                        <ProgressBar x:Name="pointbar3" Template="{DynamicResource ProgressBarControlTemplate}" />
+                    </StackPanel>
+                    <StackPanel Grid.Column="6">
+                        <TextBlock Text="PLC" Style="{StaticResource tag}"/>
+                    </StackPanel>
+                </Grid>
+            </Grid>
+            <Grid Grid.Row="1">
+                <Grid Margin="20" Height="auto" Width="auto" HorizontalAlignment="Center" >
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="auto"/>
+                        <RowDefinition Height="auto"/>
+                        <RowDefinition Height="auto"/>
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="auto"/>
+                        <ColumnDefinition Width="auto"/>
+                        <ColumnDefinition Width="auto"/>
+                    </Grid.ColumnDefinitions>
+                    <Image x:Name="imgOK1" Grid.Column="0" Grid.Row="0" Source="/RemotePLC;component/res/icon_ok.png" Style="{StaticResource icon}"/>
+                    <Image x:Name="imgOK2" Grid.Column="0" Grid.Row="1" Source="/RemotePLC;component/res/icon_ok.png" Style="{StaticResource icon}"/>
+                    <Image x:Name="imgOK3" Grid.Column="0" Grid.Row="2" Source="/RemotePLC;component/res/icon_ok.png" Style="{StaticResource icon}"/>
+                    <Image x:Name="imgERR1" Grid.Column="0" Grid.Row="0" Source="/RemotePLC;component/res/icon_err.png" Style="{StaticResource icon}"/>
+                    <Image x:Name="imgERR2" Grid.Column="0" Grid.Row="1" Source="/RemotePLC;component/res/icon_err.png" Style="{StaticResource icon}"/>
+                    <Image x:Name="imgERR3" Grid.Column="0" Grid.Row="2" Source="/RemotePLC;component/res/icon_err.png" Style="{StaticResource icon}"/>
+                    <Image x:Name="imgNTC1" Grid.Column="0" Grid.Row="0" Source="/RemotePLC;component/res/icon_notice.png" Style="{StaticResource icon}"/>
+                    <Image x:Name="imgNTC2" Grid.Column="0" Grid.Row="1" Source="/RemotePLC;component/res/icon_notice.png" Style="{StaticResource icon}"/>
+                    <Image x:Name="imgNTC3" Grid.Column="0" Grid.Row="2" Source="/RemotePLC;component/res/icon_notice.png" Style="{StaticResource icon}"/>
+                    <TextBlock Grid.Column="1" Grid.Row="0" Text="1.电脑到服务器" Style="{StaticResource checkpoint}"/>
+                    <TextBlock Grid.Column="1" Grid.Row="1" Text="2.服务器到DTU" Style="{StaticResource checkpoint}"/>
+                    <TextBlock Grid.Column="1" Grid.Row="2" Text="3.DTU到PLC" Style="{StaticResource checkpoint}"/>
+                    <StackPanel Grid.Column="2" Grid.RowSpan="3">
+                        <TextBlock x:Name="reasonBlock" Style="{StaticResource reason}"/>
+                    </StackPanel>
+                </Grid>
+            </Grid>
+        </Grid>
+    </Grid>
+</Window>

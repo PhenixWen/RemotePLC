@@ -1,0 +1,51 @@
+﻿<Window x:Class="RemotePLC.src.ui.DataMonitorDialog"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:RemotePLC.src.ui"
+        mc:Ignorable="d"
+        Title="数据监控" Height="640" Width="820" WindowStartupLocation="CenterOwner">
+    <Window.Resources>
+        <local:ColorConverter x:Key="colorCvt" />
+        <Style TargetType="Button">
+            <Setter Property="Width"  Value="80"/>
+            <Setter Property="Height"  Value="24"/>
+            <Setter Property="Margin"  Value="20, 10"/>
+        </Style>
+        <Style TargetType="{x:Type ListViewItem}">
+            <Setter Property="Foreground" Value="{Binding color,Converter={StaticResource colorCvt}}"/>
+            <Setter Property="Height" Value="14"/>
+            <Setter Property="VerticalContentAlignment" Value="Top"/>
+            <Setter Property="FontFamily" Value="Tahoma"/>
+            <Setter Property="FontSize" Value="11"/>
+            <Setter Property="BorderThickness" Value="0"/>
+        </Style>
+    </Window.Resources>
+    <DockPanel>
+        <StackPanel DockPanel.Dock="Bottom">
+            <TextBox x:Name="infoBox" Height="120" IsReadOnly="True" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto"/>
+            <Grid DockPanel.Dock="Bottom" Background="White">
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" >
+                    <Button x:Name="btnStart" Content="开始" Click="Button_Click"/>
+                    <Button x:Name="btnPause" Content="停止" Click="Button_Click"/>
+                    <Button Content="清空" Click="Button_Click"/>
+                    <Button Content="保存" Click="Button_Click"/>
+                    <Button Content="退出" Click="Button_Click"/>
+                </StackPanel>
+            </Grid>
+        </StackPanel>
+        <ListView x:Name="datas" SelectionChanged="datas_SelectionChanged" ScrollViewer.CanContentScroll="True" Foreground="Black" >
+            <ListView.View>
+                <GridView>
+                    <GridViewColumn Header="#" Width="60" DisplayMemberBinding="{Binding Path=Id}" />
+                    <GridViewColumn Header="时间(ms)" Width="80" DisplayMemberBinding="{Binding Path=TickCount}" />
+                    <GridViewColumn Header="COM/NET" Width="80" DisplayMemberBinding="{Binding Path=Type}" />
+                    <GridViewColumn Header="字节" Width="80" DisplayMemberBinding="{Binding Path=ByteCount}" />
+                    <GridViewColumn Header="ASCII" Width="200" DisplayMemberBinding="{Binding Path=ASCII}" />
+                    <GridViewColumn Header="HEX" Width="280" DisplayMemberBinding="{Binding Path=HEX}" />
+                </GridView>
+            </ListView.View>
+        </ListView>
+    </DockPanel>
+</Window>
