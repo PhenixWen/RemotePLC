@@ -520,6 +520,7 @@ namespace RemotePLC.src.ui
                 _logWin = new LogWindow();
                 _logWin.Owner = this;
                 _logWin.Show();
+                Logger.Info("Release: {0}", System.IO.File.GetLastWriteTime(this.GetType().Assembly.Location));
             }
         }
         private void Window_KeyDown(object sender, KeyEventArgs e)
