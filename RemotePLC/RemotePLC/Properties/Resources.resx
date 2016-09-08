@@ -187,13 +187,16 @@
     <value>PLC IP 地址</value>
   </data>
   <data name="IDS_PLCPORT" xml:space="preserve">
-    <value>PLC服务端口</value>
+    <value>PLC端口</value>
   </data>
   <data name="IDS_PROMPT01" xml:space="preserve">
     <value>1.请选择一个DTU设备。</value>
   </data>
-  <data name="IDS_PROMPT02" xml:space="preserve">
+  <data name="IDS_PROMPT02COM" xml:space="preserve">
     <value>2.请选择一个虚拟串口。</value>
+  </data>
+  <data name="IDS_PROMPT02NET" xml:space="preserve">
+    <value>2.请设置目标PLC的IP地址和端口。</value>
   </data>
   <data name="IDS_PROMPT03" xml:space="preserve">
     <value>PLC远程调试助手</value>

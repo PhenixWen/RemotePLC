@@ -268,7 +268,7 @@ namespace RemotePLC.Properties {
         }
         
         /// <summary>
-        ///   查找类似 PLC服务端口 的本地化字符串。
+        ///   查找类似 PLC端口 的本地化字符串。
         /// </summary>
         public static string IDS_PLCPORT {
             get {
@@ -288,9 +288,18 @@ namespace RemotePLC.Properties {
         /// <summary>
         ///   查找类似 2.请选择一个虚拟串口。 的本地化字符串。
         /// </summary>
-        public static string IDS_PROMPT02 {
+        public static string IDS_PROMPT02COM {
             get {
-                return ResourceManager.GetString("IDS_PROMPT02", resourceCulture);
+                return ResourceManager.GetString("IDS_PROMPT02COM", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 2.请设置目标PLC的IP地址和端口。 的本地化字符串。
+        /// </summary>
+        public static string IDS_PROMPT02NET {
+            get {
+                return ResourceManager.GetString("IDS_PROMPT02NET", resourceCulture);
             }
         }
         

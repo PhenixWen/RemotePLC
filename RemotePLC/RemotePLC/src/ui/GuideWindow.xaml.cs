@@ -204,9 +204,9 @@ namespace RemotePLC.src.ui
                             _connectionInfo.PlcIp = plciptext.Text;
                             _connectionInfo.PlcPort = port;
 
-                            Properties.Settings.Default.PlcIp = _connectionInfo.PlcIp;
-                            Properties.Settings.Default.PlcPort = _connectionInfo.PlcPort;
-                            Properties.Settings.Default.Save();
+                            Config.PlcIp = _connectionInfo.PlcIp;
+                            Config.PlcPort = _connectionInfo.PlcPort;
+                            Config.Save();
 
                             tabControl.SelectedIndex = 2;
                         }
@@ -268,6 +268,7 @@ namespace RemotePLC.src.ui
                         }
                         else
                         {
+                            dtuiptext.Text = device.ip;
                             //_connectionInfo.Desc = "";
                             _connectionInfo.DtuSn = device.sn;
                             //_connectionInfo.NetProtocalType = (int)NetProtocal.NP_NETPORT_TRANSMISSION;
@@ -388,8 +389,8 @@ namespace RemotePLC.src.ui
         {
             vcomlist.ItemsSource = VComManager.instance.GetComList();
 
-            _connectionInfo.PlcIp = Properties.Settings.Default.PlcIp;
-            _connectionInfo.PlcPort = Properties.Settings.Default.PlcPort;
+            _connectionInfo.PlcIp = Config.PlcIp;
+            _connectionInfo.PlcPort = Config.PlcPort;
 
             plciptext.Text = _connectionInfo.PlcIp;
             plcporttext.Text = _connectionInfo.PlcPort.ToString();
@@ -439,7 +440,7 @@ namespace RemotePLC.src.ui
 
                 textLocalIp.Text = GetInternalIP();
 
-                _connectionInfo.ServicePort = Properties.Settings.Default.ServicePort;
+                _connectionInfo.ServicePort = Config.LocalPort;
                 textServicePort.Text = _connectionInfo.ServicePort.ToString();
             }
             else if (_connectionInfo.NetProtocalType == (int)NetProtocal.NP_SERIALPORT_TRANSMISSION)
@@ -553,5 +554,21 @@ namespace RemotePLC.src.ui
 
         }
 
+        private void connectionTab_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (e.Source is TabControl)
+            {
+                int tabIndex = connectionTab.SelectedIndex;
+
+                if (tabIndex == 0)
+                {
+                    prompt02.Text = Properties.Resources.IDS_PROMPT02NET;
+                }
+                else if (tabIndex == 1)
+                {
+                    prompt02.Text = Properties.Resources.IDS_PROMPT02COM;
+                }
+            }
+        }
     }
 }

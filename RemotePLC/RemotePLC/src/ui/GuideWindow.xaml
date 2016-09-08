@@ -64,6 +64,70 @@
                 </Setter.Value>
             </Setter>
         </Style>
+        <SolidColorBrush x:Key="TabControlNormalBorderBrush" Color="#8C8E94"/>
+        <Style x:Key="ConnectionTabControlStyle" TargetType="{x:Type TabControl}">
+            <Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.ControlTextBrushKey}}"/>
+            <Setter Property="Padding" Value="4,4,4,4"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="BorderBrush" Value="{StaticResource TabControlNormalBorderBrush}"/>
+            <Setter Property="Background" Value="#F9F9F9"/>
+            <Setter Property="HorizontalContentAlignment" Value="Center"/>
+            <Setter Property="VerticalContentAlignment" Value="Center"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type TabControl}">
+                        <Grid ClipToBounds="true" SnapsToDevicePixels="true" KeyboardNavigation.TabNavigation="Local">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition x:Name="ColumnDefinition0"/>
+                                <ColumnDefinition x:Name="ColumnDefinition1" Width="0"/>
+                            </Grid.ColumnDefinitions>
+                            <Grid.RowDefinitions>
+                                <RowDefinition x:Name="RowDefinition0" Height="Auto"/>
+                                <RowDefinition x:Name="RowDefinition1" Height="*"/>
+                            </Grid.RowDefinitions>
+                            <UniformGrid x:Name="HeaderPanel" Grid.Column="0" IsItemsHost="true" Margin="2,2,2,0" Grid.Row="0" KeyboardNavigation.TabIndex="1" Panel.ZIndex="1" Rows="1" Height="28"/>
+                            <Border x:Name="ContentPanel" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" Background="{TemplateBinding Background}" Grid.Column="0" KeyboardNavigation.DirectionalNavigation="Contained" Grid.Row="1" KeyboardNavigation.TabIndex="2" KeyboardNavigation.TabNavigation="Local">
+                                <ContentPresenter x:Name="PART_SelectedContentHost" ContentSource="SelectedContent" Margin="{TemplateBinding Padding}" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}"/>
+                            </Border>
+                        </Grid>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="TabStripPlacement" Value="Bottom">
+                                <Setter Property="Grid.Row" TargetName="HeaderPanel" Value="1"/>
+                                <Setter Property="Grid.Row" TargetName="ContentPanel" Value="0"/>
+                                <Setter Property="Height" TargetName="RowDefinition0" Value="*"/>
+                                <Setter Property="Height" TargetName="RowDefinition1" Value="Auto"/>
+                                <Setter Property="Margin" TargetName="HeaderPanel" Value="2,0,2,2"/>
+                            </Trigger>
+                            <Trigger Property="TabStripPlacement" Value="Left">
+                                <Setter Property="Grid.Row" TargetName="HeaderPanel" Value="0"/>
+                                <Setter Property="Grid.Row" TargetName="ContentPanel" Value="0"/>
+                                <Setter Property="Grid.Column" TargetName="HeaderPanel" Value="0"/>
+                                <Setter Property="Grid.Column" TargetName="ContentPanel" Value="1"/>
+                                <Setter Property="Width" TargetName="ColumnDefinition0" Value="Auto"/>
+                                <Setter Property="Width" TargetName="ColumnDefinition1" Value="*"/>
+                                <Setter Property="Height" TargetName="RowDefinition0" Value="*"/>
+                                <Setter Property="Height" TargetName="RowDefinition1" Value="0"/>
+                                <Setter Property="Margin" TargetName="HeaderPanel" Value="2,2,0,2"/>
+                            </Trigger>
+                            <Trigger Property="TabStripPlacement" Value="Right">
+                                <Setter Property="Grid.Row" TargetName="HeaderPanel" Value="0"/>
+                                <Setter Property="Grid.Row" TargetName="ContentPanel" Value="0"/>
+                                <Setter Property="Grid.Column" TargetName="HeaderPanel" Value="1"/>
+                                <Setter Property="Grid.Column" TargetName="ContentPanel" Value="0"/>
+                                <Setter Property="Width" TargetName="ColumnDefinition0" Value="*"/>
+                                <Setter Property="Width" TargetName="ColumnDefinition1" Value="Auto"/>
+                                <Setter Property="Height" TargetName="RowDefinition0" Value="*"/>
+                                <Setter Property="Height" TargetName="RowDefinition1" Value="0"/>
+                                <Setter Property="Margin" TargetName="HeaderPanel" Value="0,2,2,2"/>
+                            </Trigger>
+                            <Trigger Property="IsEnabled" Value="false">
+                                <Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.GrayTextBrushKey}}"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
     </Window.Resources>
     <DockPanel>
         <Menu DockPanel.Dock="Top">
@@ -89,11 +153,7 @@
                         <RowDefinition Height="70*"/>
                     </Grid.RowDefinitions>
                     <Grid Grid.Row="0" Style="{StaticResource banner}">
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="3*"/>
-                            <ColumnDefinition Width="91*"/>
-                        </Grid.ColumnDefinitions>
-                        <TextBlock Text="{x:Static res:Resources.IDS_PROMPT01}" Style="{StaticResource tips}" VerticalAlignment="Center" Grid.Column="1" Margin="26,48,50,48"/>
+                        <TextBlock x:Name="prompt01" Text="{x:Static res:Resources.IDS_PROMPT01}" Style="{StaticResource tips}" VerticalAlignment="Center" />
                     </Grid>
                     <Grid Grid.Row="1">
                         <Grid.ColumnDefinitions>
@@ -142,7 +202,7 @@
                         <RowDefinition Height="70*"/>
                     </Grid.RowDefinitions>
                     <Grid Grid.Row="0" Style="{StaticResource banner}">
-                        <TextBlock Text="{x:Static res:Resources.IDS_PROMPT02}" Style="{StaticResource tips}" VerticalAlignment="Center"/>
+                        <TextBlock x:Name="prompt02" Style="{StaticResource tips}" VerticalAlignment="Center"/>
                     </Grid>
                     <Grid Grid.Row="1">
                         <Grid.ColumnDefinitions>
@@ -154,8 +214,8 @@
                             <Button x:Name="btnVComLastStep" Content="&lt;" HorizontalAlignment="Left" Click="Button_Click" Style="{StaticResource flip}"/>
                         </Grid>
                         <Grid Grid.Column="1">
-                            <TabControl Margin="10, 20" x:Name="connectionTab">
-                                <TabItem Header="{x:Static res:Resources.IDS_TABHEADER_NETPORT}" Width="100">
+                            <TabControl Margin="10, 20" x:Name="connectionTab" SelectionChanged="connectionTab_SelectionChanged" Style="{DynamicResource ConnectionTabControlStyle}">
+                                <TabItem Header="{x:Static res:Resources.IDS_TABHEADER_NETPORT}" >
                                     <Grid Margin="20" HorizontalAlignment="Left" VerticalAlignment="Top">
                                         <Grid.RowDefinitions>
                                             <RowDefinition Height="auto"/>
@@ -174,7 +234,7 @@
                                         <TextBox x:Name="plcporttext" Grid.Column="1" Grid.Row="2" Width="80" Margin="10" HorizontalAlignment="Left"/>
                                     </Grid>
                                 </TabItem>
-                                <TabItem Header="{x:Static res:Resources.IDS_TABHEADER_SERIALPORT}" Width="100">
+                                <TabItem Header="{x:Static res:Resources.IDS_TABHEADER_SERIALPORT}" >
                                     <Grid>
                                         <Grid.ColumnDefinitions>
                                             <ColumnDefinition Width="50*"/>
@@ -214,7 +274,7 @@
                         <RowDefinition Height="70*"/>
                     </Grid.RowDefinitions>
                     <Grid Grid.Row="0" Style="{StaticResource banner}">
-                        <TextBlock Text="{x:Static res:Resources.IDS_PROMPT03}" Grid.Row="1" Style="{StaticResource tips}" VerticalAlignment="Center"/>
+                        <TextBlock x:Name="prompt03" Text="{x:Static res:Resources.IDS_PROMPT03}" Style="{StaticResource tips}" VerticalAlignment="Center"/>
                     </Grid>
                     <Grid Grid.Row="1">
                         <Grid.ColumnDefinitions>

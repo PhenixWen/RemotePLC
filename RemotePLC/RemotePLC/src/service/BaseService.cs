@@ -493,7 +493,7 @@ namespace RemotePLC.src.service
                 }
                 else if (_dtuconnected)
                 {
-                    if (package.Id == Protocol.ID_PLCCONNECTRESPONSE && !_plcconnected)
+                    if (package.Id == Protocol.ID_PLCCONNECTRESPONSE && _waitplcconnect)
                     {
                         PlcConnectResponse response = new PlcConnectResponse(package.getPayload());
                         if (response.Result == 0)

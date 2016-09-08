@@ -137,7 +137,6 @@
     <Compile Include="src\comm\Computer.cs" />
     <Compile Include="src\comm\Config.cs" />
     <Compile Include="src\comm\DeviceInfo.cs" />
-    <Compile Include="src\comm\IniFile.cs" />
     <Compile Include="src\comm\Logger.cs" />
     <Compile Include="src\comm\MonitorData.cs" />
     <Compile Include="src\comm\MonitorDataManager.cs" />

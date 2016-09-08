@@ -9,80 +9,18 @@ namespace RemotePLC.src.comm
 {
     public static class Config
     {
-        private static IniFile _iniFile = null;
-        public static string _serverip = "121.42.161.235";
-        public static int _serverport = 6789;
-        public static int _serverapiport = 6788;
-        public static string _serverapiroot = "/plc/api";
-        public static int _buffersize = 6144;//6K=6*1024
-
-        public static int BufferSize { get { return _buffersize; } }
-        public static string ServerIp { get { return _serverip; } set { _serverip = value; } }
-        public static int ServerPort { get { return _serverport; } set { _serverport = value; } }
-        public static int ServerApiPort { get { return _serverapiport; } set { _serverapiport = value; } }
-        public static string ServerApiRoot { get { return _serverapiroot; } set { _serverapiroot = value; } }
+        public static int BufferSize { get { return Properties.Settings.Default.BufferSize; } }
+        public static string ServerIp { get { return Properties.Settings.Default.ServerIp; } set { Properties.Settings.Default.ServerIp = value; } }
+        public static int ServerPort { get { return Properties.Settings.Default.ServerPort; } set { Properties.Settings.Default.ServerPort = value; } }
+        public static int ServerApiPort { get { return Properties.Settings.Default.ApiPort; } set { Properties.Settings.Default.ApiPort = value; } }
+        public static string ServerApiRoot { get { return Properties.Settings.Default.ApiRoot; } set { Properties.Settings.Default.ApiRoot = value; } }
+        public static string PlcIp { get { return Properties.Settings.Default.PlcIp; } set { Properties.Settings.Default.PlcIp = value; } }
+        public static int PlcPort { get { return Properties.Settings.Default.PlcPort; } set { Properties.Settings.Default.PlcPort = value; } }
+        public static int LocalPort { get { return Properties.Settings.Default.LocalPort; } set { Properties.Settings.Default.LocalPort = value; } }
 
         public static void Save()
         {
-            try
-            {
-                string sectionName = "Server";
-
-                _iniFile.Set(sectionName, "Ip", _serverip);
-                _iniFile.Set(sectionName, "Port", _serverport);
-                _iniFile.Set(sectionName, "ApiPort", _serverapiport);
-                _iniFile.Set(sectionName, "ApiRoot", _serverapiroot);
-            }
-            catch (Exception e)
-            {
-                Logger.Error(e.ToString());
-            }
-
-        }
-        public static void Load()
-        {
-            try
-            {
-                string path = String.Format("{0}\\{1}", Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData), System.IO.Path.GetFileName(System.Reflection.Assembly.GetEntryAssembly().GetName().Name));
-                string filename = String.Format("{0}\\{1}", path, "Setup.ini");
-                if (!Directory.Exists(path))
-                {
-                    Directory.CreateDirectory(path);
-                }
-                if (!File.Exists(filename))
-                {
-                    File.Create(filename);
-                }
-                _iniFile = new IniFile(filename);
-
-                string sectionName = "Server";
-
-                if (!_iniFile.HasOption(sectionName, "Ip"))
-                {
-                    _iniFile.Set(sectionName, "Ip", _serverip);
-                }
-                if (!_iniFile.HasOption(sectionName, "Port"))
-                {
-                    _iniFile.Set(sectionName, "Port", _serverport);
-                }
-                if (!_iniFile.HasOption(sectionName, "ApiPort"))
-                {
-                    _iniFile.Set(sectionName, "ApiPort", _serverapiport);
-                }
-                if (!_iniFile.HasOption(sectionName, "ApiRoot"))
-                {
-                    _iniFile.Set(sectionName, "ApiRoot", _serverapiroot);
-                }
-
-                _serverip = _iniFile.Get(sectionName, "Ip");
-                _serverport = _iniFile.GetInt(sectionName, "Port");
-                _serverapiport = _iniFile.GetInt(sectionName, "ApiPort");
-                _serverapiroot = _iniFile.Get(sectionName, "ApiRoot");
-            }
-            catch (Exception e)
-            {
-                Logger.Error(e.ToString());
-            }
+            Properties.Settings.Default.Save();
         }
     }
 }

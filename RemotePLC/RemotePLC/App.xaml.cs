@@ -33,8 +33,6 @@ namespace RemotePLC
                 Environment.Exit(0);
             }
 
-            Config.Load();
-
         }
     }
 }
