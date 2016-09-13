@@ -156,6 +156,9 @@
   <data name="IDS_HEADER_DTUSN" xml:space="preserve">
     <value>DTU SN</value>
   </data>
+  <data name="IDS_HEADER_DTUVER" xml:space="preserve">
+    <value>软件版本</value>
+  </data>
   <data name="IDS_HEADER_ONLINESTATE" xml:space="preserve">
     <value>在线状态</value>
   </data>

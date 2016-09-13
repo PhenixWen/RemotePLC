@@ -178,6 +178,15 @@ namespace RemotePLC.Properties {
         }
         
         /// <summary>
+        ///   查找类似 软件版本 的本地化字符串。
+        /// </summary>
+        public static string IDS_HEADER_DTUVER {
+            get {
+                return ResourceManager.GetString("IDS_HEADER_DTUVER", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   查找类似 在线状态 的本地化字符串。
         /// </summary>
         public static string IDS_HEADER_ONLINESTATE {

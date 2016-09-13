@@ -18,6 +18,7 @@ namespace RemotePLC.src.comm
         private string _desc;
         private int _mode;
         private string _debugSn;
+        private string _version;
 
         public string color { get { return !_alive ? "LightGray" : _mode == 0 ? "Red" : _debugSn.Length == 0 ? "Green" : "Orange"; } }
         public string sn { set { _sn = value; NotifyPropertyChanged("sn"); } get { return _sn; } }
@@ -30,6 +31,7 @@ namespace RemotePLC.src.comm
         public string desc { set { _desc = value; NotifyPropertyChanged("desc"); } get { return _desc; } }
         public int mode { set { _mode = value; NotifyPropertyChanged("mode"); NotifyPropertyChanged("runningMode"); NotifyPropertyChanged("color"); } get { return _mode; } }
         public string debugSn { set { _debugSn = value; NotifyPropertyChanged("debugSn"); NotifyPropertyChanged("runningMode"); NotifyPropertyChanged("color"); } get { return _debugSn; } }
+        public string version { set { _version = value; NotifyPropertyChanged("version"); } get { return _version; } }
         public string runningMode { get { return _mode == 0 ? "监控模式" : _debugSn.Length == 0 ? "调试模式" : "调试中"; } }
 
         public event PropertyChangedEventHandler PropertyChanged;

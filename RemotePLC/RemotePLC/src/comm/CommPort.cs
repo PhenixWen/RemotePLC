@@ -248,7 +248,7 @@ namespace RemotePLC.src.comm
             //}
 
             bool fSuccess;
-            fSuccess = SetCommState(hComm, ref DCBlock);
+            fSuccess = true;// SetCommState(hComm, ref DCBlock); //不设置串口，由驱动根据另一端同步串口参数
             if (fSuccess)
             {
                 return true;
@@ -328,6 +328,7 @@ namespace RemotePLC.src.comm
                         Logger.Error("GetCommState Error!");
                     }
 
+                    //Logger.Info("Com[{0}] Info: {1}, {2}, {3}, {4}", PortName, DCBlock.BaudRate, DCBlock.ByteSize, DCBlock.Parity, DCBlock.StopBits);
                     bool ret = ReadFile(hComm, commRead, count, ref BytesRead, ref ovlCommPort);
                     if (ret)
                     {

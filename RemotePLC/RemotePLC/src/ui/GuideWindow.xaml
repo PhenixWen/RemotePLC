@@ -168,26 +168,29 @@
                                 <RowDefinition/>
                                 <RowDefinition Height="auto"/>
                             </Grid.RowDefinitions>
-                            <ListView x:Name="deviceList" Foreground="Black" Grid.Row="0" >
-                                <ListView.Resources>
-                                    <Style TargetType="{x:Type ListViewItem}" >
-                                        <Setter Property="Margin" Value="4" />
-                                        <Setter Property="Foreground" Value="{Binding color, Converter={StaticResource colorCvt}}"/>
-                                    </Style>
-                                </ListView.Resources>
-                                <ListView.View>
-                                    <GridView>
-                                        <GridViewColumn Header="{x:Static res:Resources.IDS_HEADER_DESC}" DisplayMemberBinding="{Binding desc}" />
-                                        <GridViewColumn Header="{x:Static res:Resources.IDS_HEADER_DTUSN}" DisplayMemberBinding="{Binding sn}" />
-                                        <!--<GridViewColumn Header="{x:Static res:Resources.IDS_HEADER_DTUIP}" DisplayMemberBinding="{Binding Path=ip}"  />
-                                        <GridViewColumn Header="{x:Static res:Resources.IDS_HEADER_DTUPORT}" DisplayMemberBinding="{Binding Path=port}" />-->
-                                        <GridViewColumn Header="{x:Static res:Resources.IDS_HEADER_ONLINESTATE}" DisplayMemberBinding="{Binding linkStatus}" />
-                                        <GridViewColumn Header="{x:Static res:Resources.IDS_HEADER_RUNNINGSTATE}" DisplayMemberBinding="{Binding runningMode}" />
-                                        <GridViewColumn Header="{x:Static res:Resources.IDS_HEADER_PLCBRAND}" DisplayMemberBinding="{Binding manufacturer}" />
-                                        <GridViewColumn Header="{x:Static res:Resources.IDS_HEADER_PLCMODEL}" DisplayMemberBinding="{Binding plc}" />
-                                    </GridView>
-                                </ListView.View>
-                            </ListView>
+                            <Grid Grid.Row="0">
+                                <ListView x:Name="deviceList" Foreground="Black">
+                                    <ListView.Resources>
+                                        <Style TargetType="{x:Type ListViewItem}" >
+                                            <Setter Property="Margin" Value="4" />
+                                            <Setter Property="Foreground" Value="{Binding color, Converter={StaticResource colorCvt}}"/>
+                                        </Style>
+                                    </ListView.Resources>
+                                    <ListView.View>
+                                        <GridView>
+                                            <GridViewColumn Header="{x:Static res:Resources.IDS_HEADER_DESC}" DisplayMemberBinding="{Binding desc}" />
+                                            <GridViewColumn Header="{x:Static res:Resources.IDS_HEADER_DTUSN}" DisplayMemberBinding="{Binding sn}" />
+                                            <GridViewColumn Header="{x:Static res:Resources.IDS_HEADER_DTUVER}" DisplayMemberBinding="{Binding version}" />
+                                            <!--<GridViewColumn Header="{x:Static res:Resources.IDS_HEADER_DTUIP}" DisplayMemberBinding="{Binding Path=ip}" />-->
+                                            <!--<GridViewColumn Header="{x:Static res:Resources.IDS_HEADER_DTUPORT}" DisplayMemberBinding="{Binding Path=port}" />-->
+                                            <GridViewColumn Header="{x:Static res:Resources.IDS_HEADER_ONLINESTATE}" DisplayMemberBinding="{Binding linkStatus}" />
+                                            <GridViewColumn Header="{x:Static res:Resources.IDS_HEADER_RUNNINGSTATE}" DisplayMemberBinding="{Binding runningMode}" />
+                                            <!--<GridViewColumn Header="{x:Static res:Resources.IDS_HEADER_PLCBRAND}" DisplayMemberBinding="{Binding manufacturer}" />-->
+                                            <!--<GridViewColumn Header="{x:Static res:Resources.IDS_HEADER_PLCMODEL}" DisplayMemberBinding="{Binding plc}" />-->
+                                        </GridView>
+                                    </ListView.View>
+                                </ListView>
+                            </Grid>
                             <Grid Grid.Row="1">
                                 <Button x:Name="btnDeviceRefresh" Content="{x:Static res:Resources.IDS_REFRESH}" Click="Button_Click" Margin="0 20 0 0"/>
                             </Grid>

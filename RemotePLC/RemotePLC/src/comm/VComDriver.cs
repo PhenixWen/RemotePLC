@@ -16,42 +16,41 @@ namespace RemotePLC.src.comm
         public const int MaxSerialPortNum = 255;
         private static int exec(string cmd, out ArrayList output)
         {
+            int ret = 0;
+
             output = new ArrayList();
 
-            string fileName = @"./setupc.exe";
-
             Process p = new Process();
-
             p.StartInfo.UseShellExecute = false;
-
             p.StartInfo.RedirectStandardOutput = true;
-
-            p.StartInfo.FileName = fileName;
-
+            p.StartInfo.FileName = @"./setupc.exe";
             p.StartInfo.CreateNoWindow = true;
-
             p.StartInfo.Arguments = cmd;//参数以空格分隔，如果某个参数为空，可以传入””
 
             try
             {
-                p.Start();
+                if (p.Start())
+                {
+                    string line;
+                    while ((line = p.StandardOutput.ReadLine()) != null)
+                    {
+                        output.Add(line);
+                    }
+                    p.WaitForExit();
 
-                p.WaitForExit();
+                    ret = p.ExitCode;
+
+                    p.Close();
+                }
             }
             catch (Exception e)
             {
                 Logger.Error(e.ToString());
-                return 1;
             }
 
-            string line;
-            while ((line = p.StandardOutput.ReadLine()) != null)
-            {
-                output.Add(line);
-            }
-
-            return 0;
+            return ret;
         }
+
         public static bool AddVCom(string name0, string name1)
         {
             string cmd = String.Format("install PortName={0} PortName={1},HiddenMode=yes", name0, name1);

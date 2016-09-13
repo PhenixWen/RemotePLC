@@ -462,15 +462,15 @@ namespace RemotePLC.src.ui
             {
                 MenuItem menuitem = sender as MenuItem;
 
-                if (menuitem.Header.ToString().CompareTo("设置") == 0)
+                if (menuitem.Header.ToString().CompareTo(Properties.Resources.IDS_SETUP) == 0)
                 {
                     showSetup();
                 }
-                else if (menuitem.Header.ToString().CompareTo("使用手册") == 0)
+                else if (menuitem.Header.ToString().CompareTo(Properties.Resources.IDS_USERMANUAL) == 0)
                 {
                     showManual();
                 }
-                else if (menuitem.Header.ToString().CompareTo("关于") == 0)
+                else if (menuitem.Header.ToString().CompareTo(Properties.Resources.IDS_ABOUT) == 0)
                 {
                     showAbout();
                 }
