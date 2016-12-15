@@ -6,16 +6,16 @@
       <Value Profile="(Default)">121.42.161.235</Value>
     </Setting>
     <Setting Name="ServerPort" Type="System.Int32" Scope="User">
-      <Value Profile="(Default)">5789</Value>
+      <Value Profile="(Default)">6789</Value>
     </Setting>
     <Setting Name="ApiRoot" Type="System.String" Scope="User">
       <Value Profile="(Default)">/plc/api</Value>
     </Setting>
     <Setting Name="ApiPort" Type="System.Int32" Scope="User">
-      <Value Profile="(Default)">5788</Value>
+      <Value Profile="(Default)">6788</Value>
     </Setting>
     <Setting Name="PlcIp" Type="System.String" Scope="User">
-      <Value Profile="(Default)">192.168.50.135</Value>
+      <Value Profile="(Default)">192.168.0.10</Value>
     </Setting>
     <Setting Name="PlcPort" Type="System.Int32" Scope="User">
       <Value Profile="(Default)">8500</Value>

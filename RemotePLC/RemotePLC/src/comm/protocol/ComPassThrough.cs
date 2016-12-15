@@ -30,6 +30,13 @@ namespace RemotePLC.src.comm.protocol
         private byte _parity;
         private byte _stopbits;
         private byte[] _data;
+
+        private const int LEN_sn = 8;
+        private const int LEN_syncflag = 1;
+        private const int LEN_baudrate = 4;
+        private const int LEN_bytesize = 1;
+        private const int LEN_parity = 1;
+        private const int LEN_stopbits = 1;
         public byte[] Data { get { return _data; } }
 
         public ComPassThrough(byte[] sn, byte syncflag, int baudrate, byte bytesize, byte parity, byte stopbits, byte[] data)
@@ -44,21 +51,21 @@ namespace RemotePLC.src.comm.protocol
         }
         public ComPassThrough(byte[] bytes)
         {
-            if (bytes.Length < 8)
+            if (bytes.Length < LEN_sn + LEN_syncflag + LEN_baudrate + LEN_bytesize + LEN_parity + LEN_stopbits)
             {
                 throw new ArgumentOutOfRangeException("不是有效的透传消息。");
             }
 
             MemoryStream ms = new MemoryStream(bytes);
             //sn
-            _sn = new byte[8];
-            ms.Read(_sn, 0, 8);
+            _sn = new byte[LEN_sn];
+            ms.Read(_sn, 0, _sn.Length);
 
             //syncflag
-            _syncflag =(byte)ms.ReadByte();
+            _syncflag = (byte)ms.ReadByte();
 
             //baudrate
-            byte[] baudrate = new byte[4];
+            byte[] baudrate = new byte[LEN_baudrate];
             ms.Read(baudrate, 0, baudrate.Length);
             Array.Reverse(baudrate);
             _baudrate = BitConverter.ToInt32(baudrate, 0);
@@ -73,8 +80,8 @@ namespace RemotePLC.src.comm.protocol
             _stopbits = (byte)ms.ReadByte();
 
             //data
-            _data = new byte[bytes.Length - 8];
-            ms.Read(_data, 0, bytes.Length - 8);
+            _data = new byte[bytes.Length - LEN_sn - LEN_syncflag - LEN_baudrate - LEN_bytesize - LEN_parity - LEN_stopbits];
+            ms.Read(_data, 0, _data.Length);
         }
         public override byte[] toBytes()
         {

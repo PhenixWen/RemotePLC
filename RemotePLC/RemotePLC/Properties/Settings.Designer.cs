@@ -37,7 +37,7 @@ namespace RemotePLC.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("5789")]
+        [global::System.Configuration.DefaultSettingValueAttribute("6789")]
         public int ServerPort {
             get {
                 return ((int)(this["ServerPort"]));
@@ -61,7 +61,7 @@ namespace RemotePLC.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("5788")]
+        [global::System.Configuration.DefaultSettingValueAttribute("6788")]
         public int ApiPort {
             get {
                 return ((int)(this["ApiPort"]));
@@ -73,7 +73,7 @@ namespace RemotePLC.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("192.168.50.135")]
+        [global::System.Configuration.DefaultSettingValueAttribute("192.168.0.10")]
         public string PlcIp {
             get {
                 return ((string)(this["PlcIp"]));

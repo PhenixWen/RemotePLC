@@ -20,6 +20,10 @@ namespace RemotePLC.src.service
         {
             try
             {
+                if (_vcom.IsOpen)
+                {
+                    _vcom.Close();
+                }
                 _vcom.Open(_connectionInfo.VComName4Socket);
             }
             catch (Exception e)
